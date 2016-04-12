@@ -11,15 +11,16 @@ public:
 	void encode_steg(string source, string dest, string text);
 
 	void decode_steg(string source);
+
 private:
 	png_bytep *rows;
 	png_infop info;
 	png_structp read;
 	png_structp write;
-	void read_img(string path);
-	void save_img(string dest);
 
-	string get_bits(string text, size_t text_size);
+	void read_img(string path);
+
+	void save_img(string dest);
 
 	void encode_bits(string bits, unsigned int bits_size);
 

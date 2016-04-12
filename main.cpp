@@ -20,14 +20,19 @@ void check_args(int argc, char *argv[]) {
 				cout << "Wrong number of arguments" << endl;
 				help(argv[0]);
 			}
+			if (strcmp(argv[2], "-png") != 0 && strcmp(argv[2], "-wav") != 0) {
+				cout << "Unknown parameter " << argv[2] << endl;
+				help(argv[0]);
+			}
 		} else if (strcmp(argv[1], "-d") == 0) {
 			if (argc != 4) {
 				cout << "Wrong number of arguments" << endl;
 				help(argv[0]);
 			}
-		} else if (strcmp(argv[2], "-png") != 0 && strcmp(argv[2], "-wav") != 0) {
-			cout << "Unknown parameter " << argv[2] << endl;
-			help(argv[0]);
+			if (strcmp(argv[2], "-png") != 0 && strcmp(argv[2], "-wav") != 0) {
+				cout << "Unknown parameter " << argv[2] << endl;
+				help(argv[0]);
+			}
 		} else {
 			cout << "Unknown parameter " << argv[1] << endl;
 			help(argv[0]);

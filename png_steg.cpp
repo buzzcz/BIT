@@ -2,12 +2,13 @@
 #include <cstring>
 #include <bitset>
 #include "png_steg.h"
+#include "steg.h"
 
 void png_steg::encode_steg(string source, string dest, string text) {
 	read_img(source);
 
 	unsigned int bits_size = (unsigned int) strlen(text.c_str());
-	string bits = get_bits(text, bits_size);
+	string bits = steg::get_bits(text, bits_size);
 	bits_size = bits_size * 8 + 32;
 	if (bits_size > info->height * (info->width * info->color_type)) {
 		cout << "Text is too long to be hidden in this image" << endl;
@@ -78,19 +79,6 @@ void png_steg::save_img(string dest) {
 	png_set_rows(write, info, rows);
 	png_write_png(write, info, PNG_TRANSFORM_IDENTITY, NULL);
 	fclose(f);
-}
-
-string png_steg::get_bits(string text, size_t text_size) {
-	string bits = "";
-
-	bitset<32> size(text_size);
-	bits += size.to_string();
-
-	for (unsigned int i = 0; i < text_size; i++) {
-		bitset<8> chars((unsigned long long int) text[i]);
-		bits += chars.to_string();
-	}
-	return bits;
 }
 
 void png_steg::encode_bits(string bits, unsigned int bits_size) {
