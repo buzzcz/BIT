@@ -26,6 +26,7 @@ void wav_steg::read_sound(string path) {
 	FILE *f = fopen(path.c_str(), "rb");
 	if (f == NULL) {
 		cout << "File not found" << endl;
+		free(sound);
 		exit(1);
 }
 	fseek(f, 0, SEEK_END);
@@ -75,6 +76,8 @@ void wav_steg::decode_bits() {
 		}
 	}
 	cout << endl << "Done" << endl;
+
+	free(sound);
 }
 
 

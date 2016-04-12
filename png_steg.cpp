@@ -12,6 +12,7 @@ void png_steg::encode_steg(string source, string dest, string text) {
 	bits_size = bits_size * 8 + 32;
 	if (bits_size > info->height * (info->width * info->color_type)) {
 		cout << "Text is too long to be hidden in this image" << endl;
+		png_destroy_read_struct(&read, &info, NULL);
 		exit(0);
 	}
 	encode_bits(bits, bits_size);
@@ -62,6 +63,7 @@ void png_steg::read_img(string path) {
 	rows = png_get_rows(read, info);
 
 	fclose(f);
+	free(end_info);
 }
 
 void png_steg::save_img(string dest) {
@@ -79,6 +81,8 @@ void png_steg::save_img(string dest) {
 	png_set_rows(write, info, rows);
 	png_write_png(write, info, PNG_TRANSFORM_IDENTITY, NULL);
 	fclose(f);
+	png_destroy_read_struct(&read, &info, NULL);
+	png_destroy_write_struct(&write, NULL);
 }
 
 void png_steg::encode_bits(string bits, unsigned int bits_size) {
@@ -124,4 +128,6 @@ void png_steg::decode_bits() {
 		}
 	}
 	cout << endl << "Done" << endl;
+
+	png_destroy_read_struct(&read, &info, NULL);
 }
