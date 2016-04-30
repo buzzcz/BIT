@@ -10,7 +10,7 @@ class png_steg {
 public:
 	void encode_steg(string source, string dest, string text);
 
-	void decode_steg(string source);
+	void decode_steg(string source, string output = "");
 
 private:
 	png_bytep *rows;
@@ -24,7 +24,7 @@ private:
 
 	void encode_bits(string bits, unsigned int bits_size);
 
-	void decode_bits();
+	void decode_bits(string output);
 };
 
 

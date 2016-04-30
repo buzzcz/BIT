@@ -20,9 +20,9 @@ void png_steg::encode_steg(string source, string dest, string text) {
 	cout << "Done" << endl;
 }
 
-void png_steg::decode_steg(string source) {
+void png_steg::decode_steg(string source, string output) {
 	read_img(source);
-	decode_bits();
+	decode_bits(output);
 }
 
 void png_steg::read_img(string path) {
@@ -97,7 +97,7 @@ void png_steg::encode_bits(string bits, unsigned int bits_size) {
 	}
 }
 
-void png_steg::decode_bits() {
+void png_steg::decode_bits(string output) {
 	unsigned int i = 0, j = 0;
 	unsigned int size = 0;
 	for (unsigned int count = 0; count < 32; count++) {
@@ -112,13 +112,14 @@ void png_steg::decode_bits() {
 
 	char c = 0;
 	unsigned int n = 0;
+	string text = "";
 	for (unsigned int count = 0; count < size * 8; count++) {
 		c = c << 1;
 		c += (*(rows[i] + j)) & 0b1;
 		j++;
 		n++;
 		if (n == 8) {
-			cout << c;
+			text += c;
 			n = 0;
 			c = 0;
 		}
@@ -127,7 +128,9 @@ void png_steg::decode_bits() {
 			j = 0;
 		}
 	}
-	cout << endl << "Done" << endl;
+	if (!output.empty()) steg::write_to_file(output, text);
+	else cout << text << endl;
+	cout << "Done" << endl;
 
 	png_destroy_read_struct(&read, &info, NULL);
 }

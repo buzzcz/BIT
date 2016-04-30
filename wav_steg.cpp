@@ -17,16 +17,15 @@ void wav_steg::encode_steg(string source, string dest, string text) {
 	cout << "Done" << endl;
 }
 
-void wav_steg::decode_steg(string source) {
+void wav_steg::decode_steg(string source, string output) {
 	read_sound(source);
-	decode_bits();
+	decode_bits(output);
 }
 
 void wav_steg::read_sound(string path) {
 	FILE *f = fopen(path.c_str(), "rb");
 	if (f == NULL) {
 		cout << "File not found" << endl;
-		free(sound);
 		exit(1);
 }
 	fseek(f, 0, SEEK_END);
@@ -56,7 +55,7 @@ void wav_steg::encode_bits(string bits, unsigned int bits_size) {
 	}
 }
 
-void wav_steg::decode_bits() {
+void wav_steg::decode_bits(string output) {
 	unsigned int size = 0, i;
 	for (i = 0; i < 32; i++) {
 		size = size << 1;
@@ -65,17 +64,20 @@ void wav_steg::decode_bits() {
 
 	char c = 0;
 	unsigned int n = 0;
+	string text;
 	for (; i < 32 + (size * 8); i++) {
 		c = c << 1;
 		c += (sound[44 + i]) & 0b1;
 		n++;
 		if (n == 8) {
-			cout << c;
+			text += c;
 			n = 0;
 			c = 0;
 		}
 	}
-	cout << endl << "Done" << endl;
+	if (!output.empty()) steg::write_to_file(output, text);
+	else cout << text << endl;
+	cout << "Done" << endl;
 
 	free(sound);
 }
