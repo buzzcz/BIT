@@ -11,7 +11,7 @@ void wav_steg::encode_steg(string source, string dest, string text) {
 	if (bits_size > data_size) {
 		cout << "Text is too long to be hidden in this sound" << endl;
 		exit(0);
-}
+	}
 	encode_bits(bits, bits_size);
 	save_sound(dest);
 	cout << "Done" << endl;
@@ -27,13 +27,23 @@ void wav_steg::read_sound(string path) {
 	if (f == NULL) {
 		cout << "File not found" << endl;
 		exit(1);
-}
+	}
 	fseek(f, 0, SEEK_END);
 	len = ftell(f);
 	sound = (char *) malloc((len + 1) * sizeof(char));
 	fseek(f, 0, SEEK_SET);
 	fread(sound, 1, len, f);
 	fclose(f);
+
+	string format = "";
+	for (int i = 8; i < 12; i++) {
+		format += sound[i];
+	}
+	if (strcmp(format.c_str(), "WAVE") != 0) {
+		cout << "File is not WAV" << endl;
+		free(sound);
+		exit(1);
+	}
 
 	data_size = *(unsigned int *) &sound[40];
 }
